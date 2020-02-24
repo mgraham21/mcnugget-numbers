@@ -14,6 +14,12 @@ class FrobeniusTest {
     assertEquals(expected, Frobenius.isMcNugget(value));
   }
 
+  @ParameterizedTest
+  @CsvFileSource(resources = "general-mcnugget-data.csv", numLinesToSkip = 1)
+  void isGeneralMcNugget(int value, boolean expected) {
+    assertEquals(expected, FrobeniusTest.isGeneralMcNugget(value, isGeneralMcNugget()));
+  }
+
   /**
    * Return true if the stated value can be formed as a sum of non-negative intergral multiples of
    * the elements of packSizes.
@@ -23,6 +29,19 @@ class FrobeniusTest {
    * @return true if value is a McNugget number using the specific pack sizes, false otherwise.
    */
   public static boolean isGeneralMcNugget(int value, int[] packSizes) {
-    return false; //TODO Complete implementation for extra credit.
+    boolean flag = false;
+
+    if (packSizes.length == 1 || packSizes.length == 0) {
+      if (value >= 0) {
+        if (value != 0) {
+          isGeneralMcNugget(value - packSizes[0], null);
+        }
+      }
+      flag = true;
+    }
+    for (int packSize : packSizes) {
+      int[] ithElementArray = {packSize};
+      isGeneralMcNugget(value, ithElementArray);
+    }
   }
 }
